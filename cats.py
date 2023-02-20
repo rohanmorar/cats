@@ -30,7 +30,10 @@ def pick(paragraphs, select, k):
     ''
     """
     # BEGIN PROBLEM 1
-    "*** YOUR CODE HERE ***"
+    valid_paragraphs = [p for p in paragraphs if select(p)]
+    if k >= len(valid_paragraphs):
+        return ''
+    return valid_paragraphs[k]
     # END PROBLEM 1
 
 
