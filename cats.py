@@ -124,7 +124,8 @@ def wpm(typed, elapsed):
     """
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    groups_of_5_chars, sessions_per_min = len(typed) / 5, 60 / elapsed
+    return groups_of_5_chars * sessions_per_min
     # END PROBLEM 4
 
 
