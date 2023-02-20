@@ -61,7 +61,6 @@ def about(subject):
     return select
     # END PROBLEM 2
 
-
 def accuracy(typed, source):
     """Return the accuracy (percentage of words typed correctly) of TYPED
     when compared to the prefix of SOURCE that was typed.
@@ -88,14 +87,28 @@ def accuracy(typed, source):
     typed_words = split(typed)
     source_words = split(source)
     # BEGIN PROBLEM 3
-    for i in range(len(list_1)):
-            if list_1[i] == list_2[i]:
-                correct += 1
-            else:
-                incorrect += 1
-    return correct / (incorrect + correct) * 100
+    def get_element_accuracy(list_1, list_2, incorrect, correct):
+        """
+        Returns the percentage of "correct elements" from the elements in list_1 that are the same, e.g. 
+        both the element itself and its positioning in list_2 is the same as it is in list_1.
+        """
+        for i in range(len(list_1)):
+                if list_1[i] == list_2[i]:
+                    correct += 1
+                else:
+                    incorrect += 1
+        return correct / (incorrect + correct) * 100
+    correct, incorrect, i = 0, 0, 0
+    if len(typed_words) > len(source_words):
+        incorrect += len(typed_words) - len(source_words)
+        return get_element_accuracy(source_words, typed_words, incorrect, correct)
+    elif len(typed_words) == 0 and len(source_words) == 0:
+        return 100.0
+    elif len(typed_words) == 0 and len(source_words) > 0 or len(typed_words) > 0 and len(source_words) == 0:
+        return 0.0
+    else:
+        return get_element_accuracy(typed_words, source_words, incorrect, correct)
     # END PROBLEM 3
-
 
 def wpm(typed, elapsed):
     """Return the words-per-minute (WPM) of the TYPED string.
