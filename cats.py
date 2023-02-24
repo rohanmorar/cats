@@ -283,9 +283,23 @@ def report_progress(typed, prompt, user_id, upload):
     0.2
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
-    # END PROBLEM 8
+    #preserve the index of a word and only add it to the words_correct if the word is the same at the shared index between the two lists
+    def calc_progress(i, typed, prompt):
+        """ returns the number of words that have been typed correctly, up to the first incorrect word (starting from index i = 0 e.g. the beginning word of each list)
+        >>> calc_progress(0, ['I', 'begun'], ['I', 'have', 'begun', 'to', 'type'])
+        1
+        >>> calc_progress(0, ['I', 'have', 'begun'], ['I', 'have', 'begun', 'to', 'type'])
+        3
+        >>> calc_progress(0, ['I', 'hve', 'begun', 'to', 'type'], ['I', 'have', 'begun', 'to', 'type'])
+        1
+        """
+        # base cases: if i is equal to the len(typed) we return bc all the words in typed have been checked, if the words are not equal at the same index i we return bc no more checks can be made, else we traverse the next word
+        return 0 if i == len(typed) or typed[i] != prompt[i] else 1 + calc_progress(i + 1, typed, prompt)
 
+    progress =  calc_progress(0, typed, prompt) / len(prompt)
+    upload({'id': user_id, 'progress': progress})
+    return progress
+    # END PROBLEM 8
 
 def time_per_word(words, times_per_player):
     """Given timing data, return a match data abstraction, which contains a
