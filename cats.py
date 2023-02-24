@@ -141,8 +141,8 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     Arguments:
         typed_word: a string representing a word that may contain typos
         word_list: a list of strings representing source words
-        diff_function: a function quantifying the difference between two words
-        limit: a number
+        diff_function: a function quantifying the difference between two words, takes in three arguments: (typed_word, source_word, limit)
+        limit: a number, if lowest_diff > limit ---> return typed_word
 
     >>> ten_diff = lambda w1, w2, limit: 10 # Always returns 10
     >>> autocorrect("hwllo", ["butter", "hello", "potato"], ten_diff, 20)
@@ -151,8 +151,15 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     >>> autocorrect("tosting", ["testing", "asking", "fasting"], first_diff, 10)
     'testing'
     """
+
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    if typed_word in word_list:
+        return typed_word
+    else:
+        lowest_diff_word = min(word_list, key = lambda word: diff_function(typed_word, word, limit))
+        if diff_function(typed_word, lowest_diff_word, limit) > limit:
+            return typed_word
+        return lowest_diff_word
     # END PROBLEM 5
 
 
@@ -179,7 +186,18 @@ def feline_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    # base cases
+    if typed == "" or source == "":
+        if limit - abs(len(typed) - len(source)) < 0:
+            return limit + 1
+        return abs(len(typed) - len(source))
+    if limit < 0:
+        return limit + 1
+    else:
+        if typed[:1] == source[:1]:
+            return feline_fixes(typed[1:], source[1:], limit)
+        else:
+            return 1 + feline_fixes(typed[1:], source[1:], limit - 1)
     # END PROBLEM 6
 
 
@@ -190,6 +208,13 @@ def minimum_mewtations(typed, source, limit):
         typed: a starting word
         source: a string representing a desired goal word
         limit: a number representing an upper bound on the number of edits
+    
+    Look at a letter of typed and source one at a time:
+        if the letter in typed is DIFFERENT from the LETTER in source ---> add the LETTER from source to the current position in typed
+        if the letter in typed is PRESENT and the LETTER in source is NOT aka "" ---> remove the LETTER from typed at the current position in typed
+
+
+
     >>> big_limit = 10
     >>> minimum_mewtations("cats", "scat", big_limit)       # cats -> scats -> scat
     2
@@ -198,22 +223,25 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ___________:  # Base cases should go here, you may add more base cases as needed.
+    if typed == "" or source == "":  # Base cases should go here, you may add more base cases as needed.
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        if abs(len(typed) - len(source)) < 0:
+            return limit + 1
+        return abs(len(typed) - len(source))
         # END
     # Recursive cases should go below here
-    if ___________:  # Feel free to remove or add additional cases
+    if limit < 0:  # Feel free to remove or add additional cases
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return limit + 1
         # END
+    if typed[:1] == source[:1]:
+        return minimum_mewtations(typed[1:], source[1:], limit)
     else:
-        add = ...  # Fill in these lines
-        remove = ...
-        substitute = ...
+        add = 1 + minimum_mewtations(typed, source[1:], limit - 1)
+        remove = 1 + minimum_mewtations(typed[:1], source, limit - 1)
+        substitute = 1 + minimum_mewtations(typed[1:], source[1:], limit - 1)
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return min(add, remove, substitute)
         # END
 
 
