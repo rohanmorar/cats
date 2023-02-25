@@ -295,11 +295,14 @@ def report_progress(typed, prompt, user_id, upload):
         """
         # base cases: if i is equal to the len(typed) we return bc all the words in typed have been checked, if the words are not equal at the same index i we return bc no more checks can be made, else we traverse the next word
         return 0 if i == len(typed) or typed[i] != prompt[i] else 1 + calc_progress(i + 1, typed, prompt)
-
     progress =  calc_progress(0, typed, prompt) / len(prompt)
     upload({'id': user_id, 'progress': progress})
     return progress
     # END PROBLEM 8
+
+def time_differences(times_per_player):
+    """ returns the length of times players take to type each word given times_per_player, a list of lists of a starting time and times each player finishes typing each word"""
+    return [[times_per_player[p][t + 1] - times_per_player[p][t] for t in range(len(times_per_player[p]) - 1)] for p in range(len(times_per_player))]
 
 def time_per_word(words, times_per_player):
     """Given timing data, return a match data abstraction, which contains a
@@ -319,9 +322,8 @@ def time_per_word(words, times_per_player):
     [[6, 3, 6, 2], [10, 6, 1, 2]]
     """
     # BEGIN PROBLEM 9
-    "*** YOUR CODE HERE ***"
+    return match(words, time_differences(times_per_player))
     # END PROBLEM 9
-
 
 def fastest_words(match):
     """Return a list of lists of which words each player typed fastest.
