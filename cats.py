@@ -340,12 +340,26 @@ def fastest_words(match):
     >>> p1
     [4, 1, 6]
     """
+    # data abstraction ---> match(words, times_taken)
+    # words ---> ['Just', 'have', 'fun']
+    # times_taken ---> [[5, 1, 3], [4, 1, 6]]
+
     player_indices = range(len(get_all_times(match)))  # contains an *index* for each player
     word_indices = range(len(get_all_words(match)))    # contains an *index* for each word
     # BEGIN PROBLEM 10
-    "*** YOUR CODE HERE ***"
+    result = [[] for _ in player_indices]
+    for w in word_indices:
+        curr_min, fastest_player_index, players_word_index = 999999, 0, 0
+        for p in player_indices:
+            if get_all_times(match)[p][w] < curr_min:
+                curr_min = get_all_times(match)[p][w]
+                fastest_player_index = p
+                players_word_index = w
+            if get_all_times(match)[p][w] == curr_min:
+                continue
+        result[fastest_player_index].append(get_word(match, players_word_index))
     # END PROBLEM 10
-
+    return result
 
 def match(words, times):
     """A data abstraction containing all words typed and their times.
@@ -395,7 +409,7 @@ def match_string(match):
     return f"match({get_all_words(match)}, {get_all_times(match)})"
 
 
-enable_multiplayer = False  # Change to True when you're ready to race.
+enable_multiplayer = True  # Change to True when you're ready to race.
 
 ##########################
 # Command Line Interface #
